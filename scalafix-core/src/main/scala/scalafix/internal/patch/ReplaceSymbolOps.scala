@@ -164,10 +164,8 @@ object ReplaceSymbolOps {
           val addImport =
             if (n.isDefinition || mayCauseCollision) Patch.empty
             else ctx.addGlobalImport(to)
-          if (mayCauseCollision) {
-            val qualifiedRef = Term.Select(SymbolOps.toTermRef(to.owner), Term.Name(to.signature.name))
-            addImport + ctx.replaceTree(n, qualifiedRef.syntax)
-          }
+          if (mayCauseCollision)
+            addImport + ctx.replaceTree(n, Term.Select(SymbolOps.toTermRef(to.owner), Term.Name(to.signature.name)).syntax)
           else
             addImport + ctx.replaceTree(n, to.signature.name)
         case _ =>
